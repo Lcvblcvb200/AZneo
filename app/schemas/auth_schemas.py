@@ -4,6 +4,8 @@ class SignUpSchema(BaseModel):
     name: str
     email: str
     password: str
+    cpf: str
+    rg: str
 
 class LoginSchema(BaseModel):
     email: str

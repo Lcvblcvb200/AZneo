@@ -1,11 +1,11 @@
 from sqlalchemy.orm import sessionmaker
 from app.db.db import db
 
-session = sessionmaker(bind=db)
+Session = sessionmaker(bind=db)
 
 def getsession():
     try:
-        session = session()
+        session = Session()
         yield session
     finally:
         session.close()

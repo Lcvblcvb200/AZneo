@@ -11,9 +11,9 @@ from app.models.models import User
 bcrypt_context = CryptContext(schemes=["bcrypt"])
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/signin")
 
-def create_token(iduser, token_duration=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)):
+def create_token(iduser, role, token_duration=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)):
     exp_data = datetime.now(timezone.utc) + token_duration
-    dic_info = {"sub": str(iduser), "exp": exp_data}
+    dic_info = {"sub": str(iduser), "exp": exp_data, "role": role}
     token = jwt.encode(dic_info, SECRET_KEY, algorithm=ALGORITHM)
     return token
 
@@ -23,7 +23,7 @@ def token_verify(token: str = Depends(oauth2_scheme), session: Session = Depends
         userid = decodified_token.get("sub")
     except JWTError:
         raise HTTPException(status_code=401, detail="Invalid Token")
-    user = session.query(User).filter(User.id == userid).first()
+    user = session.query(User).filter(User.id_user == userid).first()
     if not user:
         raise HTTPException(status_code=401, detail="User Not Found")
     return user
