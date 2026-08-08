@@ -1,15 +1,15 @@
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from slugify import slugify
-from app.models.models import Product
+from backend.app.models.models import Product
 
 class ProductService:
     def __init__(self, session: Session):
         self.session = session
 
-    def create_product(self, name: str, description: str, brand: str, stock: int, price: float, image_url: str) -> Product:
+    def create_product(self, name: str, description: str, brand: str, price: float, image_url: str, stock: int) -> Product:
         slug = slugify(name)
-        queryproduct = self.session.query(Product).filter(Product.slug == slug).first()
+        queryproduct = self.session.query(Product).filter(Product.slug == slug).first() 
         if queryproduct:
             raise HTTPException(status_code=409, detail="This Product Already Exists")
         else:
@@ -25,7 +25,7 @@ class ProductService:
 
     def get_product_by_name(self, name: str) -> list[Product]:
         search = f"%{name}%"
-        queryproduct = self.session.query(Product).filter(Product.name.ilike(search)).all()
+        queryproduct = self.session.query(Product).filter(Product.product_name.ilike(search)).all()
         if not queryproduct:
             raise HTTPException(status_code=404, detail="Product Not Found")
         return queryproduct
@@ -36,14 +36,14 @@ class ProductService:
             raise HTTPException(status_code=404, detail="Product Not Found")
         return queryproduct
 
-    def update_product(self, product_id: int, name: str | None = None, description: str | None = None, brand: str | None = None, stock: int | None = None, price: float | None = None, image_url: str | None = None) -> Product:
+    def update_product(self, product_id: int, name: str | None = None, description: str | None = None, brand: str | None = None, price: int | None = None, image_url: float | None = None, stock: str | None = None) -> Product:
         queryproduct = self.session.query(Product).filter(Product.id_product == product_id).first()
         if not queryproduct:
             raise HTTPException(status_code=404, detail="Product Not Found")
         
         if name is not None:
             slug = slugify(name)
-            existing_product = self.session.query(Product).filter(Product.slug == slug, Product.id_product != product_id)
+            existing_product = self.session.query(Product).filter(Product.slug == slug, Product.id_product != product_id).first()
             if existing_product:
                 raise HTTPException(status_code=409, detail="Product Already Exists")
             queryproduct.name = name 

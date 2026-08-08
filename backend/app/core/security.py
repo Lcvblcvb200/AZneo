@@ -1,12 +1,12 @@
 from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
-from app.core.config import ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES, SECRET_KEY
+from backend.app.core.config import ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES, SECRET_KEY
 from jose import jwt, JWTError
-from app.core.db import getsession
+from backend.app.core.db import getsession
 from datetime import datetime, timedelta, timezone
 from sqlalchemy.orm import Session
-from app.models.models import User
+from backend.app.models.models import User
 
 bcrypt_context = CryptContext(schemes=["bcrypt"])
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/signin")
@@ -26,6 +26,11 @@ def token_verify(token: str = Depends(oauth2_scheme), session: Session = Depends
     user = session.query(User).filter(User.id_user == userid).first()
     if not user:
         raise HTTPException(status_code=401, detail="User Not Found")
+    return user
+
+def is_admin(user: User = Depends(token_verify)):
+    if user.role != "admin":
+        raise HTTPException(status_code=403, detail="Unauthorized")
     return user
 
 def autenticate(email, password, session):

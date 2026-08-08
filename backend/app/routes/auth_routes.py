@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends
-from app.schemas.auth_schemas import SignUpSchema, LoginSchema, TokenOut, UserOut
-from app.core.db import getsession
+from backend.app.schemas.auth_schemas import SignUpSchema, LoginSchema, TokenOut, UserOut
+from backend.app.core.db import getsession
 from sqlalchemy.orm import Session
-from app.core.security import token_verify
-from app.services.auth_services import UserService
-from app.models.models import User
+from backend.app.core.security import token_verify
+from backend.app.services.auth_services import UserService
+from backend.app.models.models import User
 
 authrouter = APIRouter(prefix="/auth", tags=["auth"])
 

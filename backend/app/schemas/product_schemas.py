@@ -12,9 +12,9 @@ class ProductUpdate(BaseModel):
     name: str | None = None
     description: str | None = None
     brand: str | None = None
-    stock: int | None = None
     price: float | None = None
     image_url: str | None = None
+    stock: int | None = None
 
 class ProductOut(BaseModel):
     id_product: int
@@ -24,5 +24,6 @@ class ProductOut(BaseModel):
     price: float
     stock: int
     image_url: str | None = None
+    slug: str
 
     model_config = ConfigDict(from_attributes=True)

@@ -1,7 +1,7 @@
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
-from app.models.models import User
-from app.core.security import create_token, autenticate, passhash
+from backend.app.models.models import User
+from backend.app.core.security import create_token, autenticate, passhash
 
 class UserService:
     def __init__(self, session: Session):

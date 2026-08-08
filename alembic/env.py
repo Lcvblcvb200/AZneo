@@ -20,8 +20,8 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 # importa o Base dos seus models pra o autogenerate detectar as tabelas
-from app.db.db import Base
-from app.models.models import User, Product, Cart, Item_Cart # importa todos os models
+from backend.app.db.db import Base
+from backend.app.models.models import User, Product, Cart, Item_Cart # importa todos os models
 
 target_metadata = Base.metadata
 
