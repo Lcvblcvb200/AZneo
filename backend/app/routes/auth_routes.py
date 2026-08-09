@@ -26,6 +26,6 @@ async def signin(body: LoginSchema, session: Session = Depends(getsession)):
         "token_type": "Bearer"
     }
 
-@authrouter.get("/profile")
+@authrouter.get("/profile", response_model=UserOut)
 async def profile(user: User = Depends(token_verify)):
-    return{"message": f"{user.name}, Bem vindo ao AZneo!"}
+    return user

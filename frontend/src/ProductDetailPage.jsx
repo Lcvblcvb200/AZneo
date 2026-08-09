@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./catalog-theme.css";
 import logo from "./assets/logo-azneo-full.png";
-import { getProductBySlug } from "./api.js";
+import { getProductBySlug, deleteProduct, resolveImageUrl } from "./api.js";
 
 const currencyFormatter = new Intl.NumberFormat("pt-BR", {
   style: "currency",
@@ -13,7 +13,7 @@ function installmentValue(price, times = 12) {
   return currencyFormatter.format(price / times);
 }
 
-export default function ProductDetailPage({ slug, onBack }) {
+export default function ProductDetailPage({ slug, onBack, onEdit, onDeleted }) {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -78,23 +78,42 @@ export default function ProductDetailPage({ slug, onBack }) {
         )}
 
         {!loading && !notFound && !error && product && (
-          <ProductDetail product={product} />
+          <ProductDetail product={product} onEdit={onEdit} onDeleted={onDeleted} />
         )}
       </main>
     </div>
   );
 }
 
-function ProductDetail({ product }) {
+function ProductDetail({ product, onEdit, onDeleted }) {
   const outOfStock = product.stock <= 0;
   const lowStock = !outOfStock && product.stock <= 3;
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState("");
+
+  const handleDelete = async () => {
+    const confirmed = window.confirm(
+      `Tem certeza que quer excluir "${product.product_name}"? Essa ação não pode ser desfeita.`
+    );
+    if (!confirmed) return;
+
+    setDeleting(true);
+    setDeleteError("");
+    try {
+      await deleteProduct(product.id_product);
+      if (onDeleted) onDeleted();
+    } catch (err) {
+      setDeleteError(err.message);
+      setDeleting(false);
+    }
+  };
 
   return (
     <div className="az-detail-card">
       <div className="az-detail-image-wrap">
         {product.image_url ? (
           <img
-            src={product.image_url}
+            src={resolveImageUrl(product.image_url)}
             alt={product.product_name}
             className="az-detail-image"
           />
@@ -130,6 +149,33 @@ function ProductDetail({ product }) {
         <button className="btn az-btn az-detail-btn" disabled={outOfStock}>
           {outOfStock ? "Indisponível" : "Comprar"}
         </button>
+
+        {(onEdit || onDeleted) && (
+          <div className="az-detail-actions">
+            {onEdit && (
+              <button
+                type="button"
+                className="az-btn-ghost"
+                onClick={() => onEdit(product)}
+              >
+                Editar
+              </button>
+            )}
+            {onDeleted && (
+              <button
+                type="button"
+                className="az-btn-ghost danger"
+                onClick={handleDelete}
+                disabled={deleting}
+              >
+                {deleting ? "Excluindo..." : "Excluir"}
+              </button>
+            )}
+          </div>
+        )}
+        {deleteError && (
+          <div className="az-error-box mono mt-2">{deleteError}</div>
+        )}
       </div>
     </div>
   );

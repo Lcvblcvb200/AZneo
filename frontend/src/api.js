@@ -8,12 +8,13 @@ const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
  * Every other function in this file uses it under the hood.
  */
 async function request(path, options = {}) {
+  const isFormData = options.body instanceof FormData;
+  const headers = { ...(options.headers || {}) };
+  if (!isFormData) headers["Content-Type"] = "application/json";
+
   const response = await fetch(`${API_URL}${path}`, {
-    headers: {
-      "Content-Type": "application/json",
-      ...(options.headers || {}),
-    },
     ...options,
+    headers,
   });
 
   // The backend should respond in JSON. If parsing fails, fall back to
@@ -106,6 +107,52 @@ export function searchProducts(name) {
  */
 export function getProductBySlug(slug) {
   return request(`/products/product/${encodeURIComponent(slug)}`);
+}
+
+export function resolveImageUrl(path) {
+  if (!path) return null;
+  if (path.startsWith("http")) return path;
+  return `${API_URL}${path}`;
+}
+
+/**
+ * Creates a new product (real route: POST /products/register).
+ * Protected — requires the logged-in user's token. Expects a
+ * FormData instance (multipart/form-data) built by the caller.
+ */
+export function createProduct(formData) {
+  const token = getAccessToken();
+  return request("/products/register", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` },
+    body: formData,
+  });
+}
+
+/**
+ * Updates an existing product (real route: PUT /products/update/{id}).
+ * Protected — requires the logged-in user's token. Expects a
+ * FormData instance (multipart/form-data) built by the caller.
+ */
+export function updateProduct(productId, formData) {
+  const token = getAccessToken();
+  return request(`/products/update/${productId}`, {
+    method: "PUT",
+    headers: { Authorization: `Bearer ${token}` },
+    body: formData,
+  });
+}
+
+/**
+ * Deletes a product (real route: DELETE /products/delete/{id}).
+ * Protected — requires the logged-in user's token.
+ */
+export function deleteProduct(productId) {
+  const token = getAccessToken();
+  return request(`/products/delete/${productId}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${token}` },
+  });
 }
 
 /**

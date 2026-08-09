@@ -62,3 +62,23 @@ body{
 
 .az-link-cyan{color:var(--az-cyan);text-decoration:none;font-size:.83rem;font-weight:500;}
 .az-link-cyan:hover{color:var(--az-white);}
+
+.az-field-group{margin-bottom:1.15rem;position:relative;}
+.az-field-label{
+  font-size:.72rem;font-weight:500;color:var(--az-gray);
+  margin-bottom:.4rem;display:flex;align-items:center;gap:.4rem;
+  text-transform:uppercase;letter-spacing:.05em;
+}
+.az-field-label .node{width:5px;height:5px;border-radius:50%;background:var(--az-gray-dim);transition:all .2s ease;}
+.az-field-group.focused .az-field-label{color:var(--az-cyan);}
+.az-field-group.focused .node{background:var(--az-cyan);box-shadow:0 0 6px var(--az-cyan);}
+
+.az-input-icon-wrap{position:relative;}
+.az-input-icon-wrap .az-toggle-pw{
+  position:absolute;right:.85rem;top:50%;transform:translateY(-50%);
+  background:none;border:none;color:var(--az-gray);font-size:.78rem;cursor:pointer;
+  padding:0;font-family:'JetBrains Mono',monospace;
+}
+.az-input-icon-wrap .az-toggle-pw:hover{color:var(--az-cyan);}
+
+textarea.form-control{resize:vertical;min-height:90px;}

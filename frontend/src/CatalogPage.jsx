@@ -7,6 +7,7 @@ import {
   searchProducts,
   getAccessToken,
   logout,
+  resolveImageUrl,
 } from "./api.js";
 
 const currencyFormatter = new Intl.NumberFormat("pt-BR", {
@@ -31,7 +32,7 @@ function installmentValue(price, times = 12) {
   return currencyFormatter.format(price / times);
 }
 
-export default function CatalogPage({ onRequireAuth, onProductSelect }) {
+export default function CatalogPage({ onRequireAuth, onProductSelect, onAddProduct }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -179,6 +180,15 @@ export default function CatalogPage({ onRequireAuth, onProductSelect }) {
                 }`}
           </div>
         )}
+        {!needsAuth && onAddProduct && (
+          <button
+            type="button"
+            className="btn az-topbar-add"
+            onClick={onAddProduct}
+          >
+            + Adicionar produto
+          </button>
+        )}
       </header>
 
       {/* promo strip — decorative, same brand identity as the login screen */}
@@ -296,7 +306,7 @@ function ProductCard({ product, onSelect }) {
       <div className="az-product-image-wrap">
         {product.image_url ? (
           <img
-            src={product.image_url}
+            src={resolveImageUrl(product.image_url)}
             alt={product.product_name}
             className="az-product-image"
           />

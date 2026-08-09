@@ -14,6 +14,7 @@ class LoginSchema(BaseModel):
 class UserOut(BaseModel):
     name: str
     email: str
+    role: str
 
 class TokenOut(BaseModel):
     access_token: str

@@ -76,24 +76,6 @@
 .az-form-title{font-family:'Orbitron',sans-serif;font-size:1.3rem;font-weight:700;margin-bottom:.35rem;}
 .az-form-caption{color:var(--az-gray);font-size:.85rem;margin-bottom:1.9rem;}
 
-.az-field-group{margin-bottom:1.15rem;position:relative;}
-.az-field-label{
-  font-size:.72rem;font-weight:500;color:var(--az-gray);
-  margin-bottom:.4rem;display:flex;align-items:center;gap:.4rem;
-  text-transform:uppercase;letter-spacing:.05em;
-}
-.az-field-label .node{width:5px;height:5px;border-radius:50%;background:var(--az-gray-dim);transition:all .2s ease;}
-.az-field-group.focused .az-field-label{color:var(--az-cyan);}
-.az-field-group.focused .node{background:var(--az-cyan);box-shadow:0 0 6px var(--az-cyan);}
-
-.az-input-icon-wrap{position:relative;}
-.az-input-icon-wrap .az-toggle-pw{
-  position:absolute;right:.85rem;top:50%;transform:translateY(-50%);
-  background:none;border:none;color:var(--az-gray);font-size:.78rem;cursor:pointer;
-  padding:0;font-family:'JetBrains Mono',monospace;
-}
-.az-input-icon-wrap .az-toggle-pw:hover{color:var(--az-cyan);}
-
 .form-check-input{background-color:var(--az-surface-2);border:1px solid var(--az-border);}
 .form-check-input:checked{background-color:var(--az-cyan);border-color:var(--az-cyan);}
 .form-check-label{font-size:.83rem;color:var(--az-gray);}
