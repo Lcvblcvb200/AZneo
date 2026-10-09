@@ -22,13 +22,22 @@ async function request(path, options = {}) {
   const data = await response.json().catch(() => null);
 
   if (!response.ok) {
-    // FastAPI usually returns errors as { "detail": "message" }
-    const message =
-      (data && (data.detail || data.message)) ||
-      "Could not reach the server. Please try again.";
-    const error = new Error(
-      typeof message === "string" ? message : "Error processing the request."
-    );
+    let message = "Could not reach the server. Please try again.";
+
+    if (data && typeof data.detail === "string") {
+      message = data.detail;
+    } else if (data && Array.isArray(data.detail)) {
+      message = data.detail
+        .map((item) => {
+          const field = Array.isArray(item.loc) ? item.loc.at(-1) : "campo";
+          return `${field}: ${item.msg}`;
+        })
+        .join(" | ");
+    } else if (data && data.message) {
+      message = data.message;
+    }
+
+    const error = new Error(message);
     error.status = response.status;
     throw error;
   }
@@ -82,10 +91,18 @@ export function logout() {
  * Fetches the product catalog (real route: GET /products/view).
  * This route is protected — it requires the logged-in user's token.
  */
-export function getProducts() {
+export function getProducts(page = 1, limit = 15) {
   const token = getAccessToken();
-  return request("/products/view", {
-    headers: { Authorization: `Bearer ${token}` },
+
+  const query = new URLSearchParams({
+    page: String(page),
+    limit: String(limit),
+  });
+
+  return request(`/products/view?${query.toString()}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   });
 }
 
@@ -106,7 +123,10 @@ export function searchProducts(name) {
  * This route is public — no token required. Used for the product detail page.
  */
 export function getProductBySlug(slug) {
-  return request(`/products/product/${encodeURIComponent(slug)}`);
+  const token = getAccessToken();
+  return request(`/products/product/${encodeURIComponent(slug)}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
 }
 
 export function resolveImageUrl(path) {
@@ -156,6 +176,52 @@ export function deleteProduct(productId) {
 }
 
 /**
+ * Fetches the logged-in user's cart (real route: GET /cart/view).
+ */
+export function getCart() {
+  const token = getAccessToken();
+  return request("/cart/view", {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+}
+
+/**
+ * Adds a product to the cart, or increases its quantity if it's
+ * already there (real route: POST /cart/add).
+ */
+export function addToCart(productId, quantity = 1) {
+  const token = getAccessToken();
+  return request("/cart/add", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` },
+    body: JSON.stringify({ product_id: productId, quantity }),
+  });
+}
+
+/**
+ * Updates the quantity of a cart item (real route: PUT /cart/change/{id}).
+ */
+export function updateCartItem(itemId, quantity) {
+  const token = getAccessToken();
+  return request(`/cart/change/${itemId}`, {
+    method: "PUT",
+    headers: { Authorization: `Bearer ${token}` },
+    body: JSON.stringify({ quantity }),
+  });
+}
+
+/**
+ * Removes an item from the cart (real route: DELETE /cart/delete/{id}).
+ */
+export function removeCartItem(itemId) {
+  const token = getAccessToken();
+  return request(`/cart/delete/${itemId}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+}
+
+/**
  * Calls the protected GET /auth/profile route, which requires the
  * logged-in user's token (validated by your token_verify dependency).
  */
@@ -163,5 +229,64 @@ export function getProfile() {
   const token = getAccessToken();
   return request("/auth/profile", {
     headers: { Authorization: `Bearer ${token}` },
+  });
+}
+
+// =========================
+// COMMENTS
+// =========================
+
+export function getComments(productId, page = 1, limit = 15) {
+  const token = getAccessToken();
+
+  const query = new URLSearchParams({
+    page: String(page),
+    limit: String(limit),
+  });
+
+  return request(
+    `/comments/product/${productId}?${query.toString()}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+}
+
+
+export function createComment(productId, formData) {
+  const token = getAccessToken();
+
+  return request(`/comments/product/${productId}`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  });
+}
+
+
+export function updateComment(commentId, formData) {
+  const token = getAccessToken();
+
+  return request(`/comments/${commentId}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  });
+}
+
+export function deleteComment(commentId) {
+  const token = getAccessToken();
+
+  return request(`/comments/${commentId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   });
 }

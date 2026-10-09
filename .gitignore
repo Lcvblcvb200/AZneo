@@ -9,3 +9,6 @@ alembic/versions/__pycache__/
 backend/app/static/
 static/products/*
 !static/products/.gitkeep
+/static/comments/
+/static/products/
+/uploads/comments/

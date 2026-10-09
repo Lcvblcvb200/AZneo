@@ -6,7 +6,7 @@ from jose import jwt, JWTError
 from backend.app.core.db import getsession
 from datetime import datetime, timedelta, timezone
 from sqlalchemy.orm import Session
-from backend.app.models.models import User
+from backend.app.models.models import User, UserCompany
 
 bcrypt_context = CryptContext(schemes=["bcrypt"])
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/signin")

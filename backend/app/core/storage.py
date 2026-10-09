@@ -1,5 +1,6 @@
 import os
 import uuid
+import shutil
 from fastapi import UploadFile, HTTPException
 
 UPLOAD_DIR = "static/products"
@@ -19,3 +20,26 @@ def save_product_image(file: UploadFile) -> str:
         buffer.write(file.file.read())
 
     return f"/static/products/{filename}"
+
+COMMENT_UPLOAD_DIR = "static/comments"
+
+os.makedirs(COMMENT_UPLOAD_DIR, exist_ok=True)
+
+
+def save_comment_image(image: UploadFile) -> str:
+    extension = os.path.splitext(image.filename)[1]
+
+    filename = f"{uuid.uuid4()}{extension}"
+
+    file_path = os.path.join(
+        COMMENT_UPLOAD_DIR,
+        filename
+    )
+
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(
+            image.file,
+            buffer
+        )
+
+    return f"/static/comments/{filename}"
