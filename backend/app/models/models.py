@@ -1,5 +1,7 @@
-from sqlalchemy import Column, String, Numeric, Integer, ForeignKey
+from datetime import datetime, timezone
+from sqlalchemy import Column, String, Numeric, Integer, ForeignKey, DateTime, CheckConstraint
 from sqlalchemy.orm import relationship
+from sqlalchemy.dialects.postgresql import JSONB
 from backend.app.db.db import Base
 
 class User(Base):
@@ -20,6 +22,8 @@ class User(Base):
 
     company = relationship("UserCompany", back_populates="user", uselist=False)
     comments = relationship("Comments", back_populates="user")
+    addresses = relationship("Address", back_populates="user")
+    orders = relationship("Order", back_populates="user")
 
 class UserCompany(Base):
     __tablename__ = "usercompany"
@@ -59,6 +63,9 @@ class Address(Base):
             self.neighborhood = neighborhood
             self.city = city
             self.state = state
+
+    user = relationship("User", back_populates="addresses")
+    orders = relationship("Order", back_populates="address")
 
 class Product(Base):
     __tablename__ = "products"
@@ -130,3 +137,66 @@ class Comments(Base):
           self.image_url = image_url
           self.content = content
           self.rating = rating
+
+class Order(Base):
+     __tablename__ = "orders"
+     id_order = Column("id_order", Integer, primary_key=True, autoincrement=True, nullable=False)
+     id_user = Column("id_user", Integer, ForeignKey("users.id_user"), nullable=False)
+     id_address = Column("id_address", Integer, ForeignKey("addresses.id_address"))
+     contact_name = Column("contact_name", String, nullable=False)
+     contact_email = Column("contact_email", String, nullable=False)
+     contact_number = Column("contact_number", String, nullable=False)
+     contact_cpf = Column("contact_cpf", String, nullable=False)
+     subtotal = Column("subtotal", Numeric(10, 2), nullable=False)
+     total_items = Column("total_items", Integer, nullable=False)
+     shipping_cost = Column("shipping_cost", Numeric(10, 2), nullable=False)
+     shipping_address = Column(JSONB, nullable=False)
+     created_at = Column("created_at", DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+     total_price = Column("total_price", Numeric(10, 2), nullable=False)
+     coupon_code = Column("coupon_code", String, nullable=True)
+     discount_amount = Column("discount_amount", Numeric(10, 2), nullable=False, default=0)
+     status = Column("status", String, nullable=False, default="Pendente")
+
+     def __init__(self, id_user, id_address, contact_name, contact_email, contact_number, contact_cpf, subtotal, total_items, shipping_cost, total_price, shipping_address, coupon_code, discount_amount=0, status="Pendente"):
+               self.id_user = id_user
+               self.id_address = id_address
+               self.contact_name = contact_name
+               self.contact_email = contact_email
+               self.contact_number = contact_number
+               self.contact_cpf = contact_cpf
+               self.subtotal = subtotal
+               self.total_items = total_items
+               self.shipping_cost = shipping_cost
+               self.total_price = total_price
+               self.shipping_address = shipping_address
+               self.coupon_code = coupon_code
+               self.discount_amount = discount_amount
+               self.status = status
+
+     user = relationship("User", back_populates="orders")
+     address = relationship("Address", back_populates="orders")
+     items = relationship("Item_Order", back_populates="order")
+
+class Item_Order(Base):
+     __tablename__ = "item_order"
+     __table_args__ = (CheckConstraint("quantity >= 1", name = "ck_item_order_priority"), CheckConstraint("unit_discount >= 0 AND unit_discount < unit_price", name="ck_item_order_discount"))
+     id_order_item = Column("id_order_item", Integer, primary_key=True, autoincrement=True, nullable=False)
+     id_order = Column("id_order", ForeignKey("orders.id_order"), nullable=False)
+     id_product = Column("id_product", ForeignKey("products.id_product"), nullable=False)
+     product_name = Column("product_name", String, nullable=False)
+     quantity = Column("quantity", Integer, nullable=False)
+     unit_price = Column("unit_price", Numeric(10, 2), nullable=False)
+     unit_discount = Column("unit_discount", Numeric(10, 2), nullable=False)
+     total_price = Column("total_price", Numeric(10, 2), nullable=False)
+
+     def __init__(self, id_order, id_product, product_name, quantity, unit_price, unit_discount, total_price):
+          self.id_order = id_order
+          self.id_product = id_product
+          self.product_name = product_name
+          self.quantity = quantity
+          self.unit_price = unit_price
+          self.unit_discount = unit_discount
+          self.total_price = total_price
+
+     order = relationship("Order", back_populates="items")
+     product = relationship("Product")

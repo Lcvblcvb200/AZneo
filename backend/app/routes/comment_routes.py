@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Form, File, UploadFile
 from sqlalchemy.orm import Session
 from backend.app.core.db import getsession
-from backend.app.core.security import token_verify, is_admin
+from backend.app.core.security import token_verify
 from backend.app.core.storage import save_comment_image
 from backend.app.services.comment_services import CommentServices
 from backend.app.models.models import User

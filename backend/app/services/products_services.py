@@ -3,19 +3,22 @@ from sqlalchemy import or_
 from sqlalchemy.orm import Session
 from slugify import slugify
 from backend.app.models.models import Product, Item_Cart
+from backend.app.storage.storage_service import StorageService
 import math
 
 class ProductService:
     def __init__(self, session: Session):
         self.session = session
+        self.storage = StorageService()
 
     def create_product(self, name: str, description: str, brand: str, price: float, image_url: str, stock: int, barcode: str, category: str) -> Product:
         slug = slugify(name)
+        image_path = self.storage.upload_image(file=image_url, folder="products")
         queryproduct = self.session.query(Product).filter(or_(Product.slug == slug, Product.barcode == barcode)).first() 
         if queryproduct:
             raise HTTPException(status_code=409, detail="This Product Already Exists")
         else:
-            newproduct = Product(name, description, brand, price, image_url, stock, slug, barcode, category)
+            newproduct = Product(name, description, brand, price, image_path, stock, slug, barcode, category)
             self.session.add(newproduct)
             self.session.commit()
             self.session.refresh(newproduct)

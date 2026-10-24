@@ -2768,3 +2768,242 @@
     padding: 0 14px;
   }
 }
+/* Estrelas das avaliações */
+.az-catalog .rating-stars,
+.az-catalog .review-stars,
+.az-catalog .star-rating,
+.az-catalog .rating-star,
+.az-catalog .review-star {
+  color: #ffc107;
+}
+
+/* Botões de estrelas */
+.az-catalog .rating-stars button,
+.az-catalog .review-stars button,
+.az-catalog .star-rating button {
+  color: #ffc107;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+/* Campo de upload de imagem */
+.az-catalog input[type="file"] {
+  color: #9caec1;
+  font-size: 0.8rem;
+  max-width: 100%;
+}
+
+.az-catalog input[type="file"]::file-selector-button {
+  padding: 10px 16px;
+  margin-right: 12px;
+
+  border: 1px solid rgba(45, 216, 240, 0.4);
+  border-radius: 8px;
+
+  background: linear-gradient(90deg, #28c9e5, #3984f5);
+  color: #04121a;
+
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+
+  cursor: pointer;
+  transition: filter 0.2s ease, transform 0.2s ease;
+}
+
+.az-catalog input[type="file"]::file-selector-button:hover {
+  filter: brightness(1.12);
+}
+/* Botão de imagem das avaliações */
+.az-catalog input[type="file"] {
+  width: 100%;
+  color: #829bb4;
+  font-family: inherit;
+  font-size: 0.75rem;
+}
+
+.az-catalog input[type="file"]::file-selector-button {
+  padding: 10px 16px;
+  margin-right: 12px;
+
+  background: #142b3b;
+  color: #ffffff;
+
+  border: 1px solid #23c9ed;
+  border-radius: 7px;
+
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.az-catalog input[type="file"]::file-selector-button:hover {
+  background: #1c4055;
+  border-color: #50e2ff;
+}
+
+/* ESTRELAS DAS AVALIAÇÕES */
+
+.az-star-selector {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 14px;
+}
+
+.az-star-selector .az-star {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: #586574;
+  font-size: 27px;
+  line-height: 1;
+  padding: 2px;
+  cursor: pointer;
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.az-star-selector .az-star.active,
+.az-star-selector .az-star:hover {
+  color: #ffc107;
+}
+
+.az-star-selector .az-star:hover {
+  transform: scale(1.12);
+}
+
+.az-comment-rating {
+  color: #ffc107 !important;
+  font-size: 18px;
+  letter-spacing: 2px;
+}
+
+/* UPLOAD DAS AVALIAÇÕES */
+
+.az-review-image-field {
+  margin: 12px 0;
+}
+
+.az-review-image-field > .az-comment-label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.az-review-image-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.az-review-image-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.az-review-image-select {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  min-height: 38px;
+  padding: 7px 13px;
+
+  background: #142b3b;
+  border: 1px solid #23c9ed;
+  border-radius: 7px;
+
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.az-review-image-select:hover {
+  background: #1c4055;
+}
+
+.az-review-image-input:focus-visible
++ .az-review-image-preview {
+  outline: 2px solid #23c9ed;
+}
+
+.az-review-image-plus {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 19px;
+  height: 19px;
+
+  background: #096783;
+  border-radius: 4px;
+
+  color: #42e3ff;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* MINIATURA DA IMAGEM */
+
+.az-review-image-preview {
+  position: relative;
+  width: 70px;
+  height: 65px;
+  flex-shrink: 0;
+
+  background: #0b131b;
+  border: 1px solid #314657;
+  border-radius: 8px;
+}
+
+.az-review-image-preview img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 7px;
+}
+
+/* REMOVER IMAGEM */
+
+.az-review-image-remove {
+  position: absolute;
+  top: -9px;
+  right: -9px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 24px;
+  height: 24px;
+  padding: 0;
+
+  background: #30171d;
+  border: 1px solid #fb7185;
+  border-radius: 50%;
+
+  color: #fb7185;
+  font-size: 19px;
+  line-height: 1;
+
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.az-review-image-remove:hover {
+  background: #dc3545;
+  color: #fff;
+}
