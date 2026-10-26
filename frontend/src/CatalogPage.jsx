@@ -23,7 +23,7 @@ const currencyFormatter = new Intl.NumberFormat("pt-BR", {
   currency: "BRL",
 });
 
-const PRODUCTS_PER_PAGE = 15;
+const PRODUCTS_PER_PAGE = 5;
 
 const CATEGORIES = [
   "Todos",
