@@ -17,7 +17,7 @@ class StorageService:
             raise HTTPException(status_code=400, detail="Invalid Folder")
         if file.content_type not in self.ALLOWED_TYPES:
             raise HTTPException(status_code=400, detail="Invalid Image Format")
-        content = file.read()
+        content = file.file.read()
 
         if not content or len(content) > self.MAX_FILE_SIZE:
             raise HTTPException(status_code=400, detail="No Image Or Bigger Than 5MB")

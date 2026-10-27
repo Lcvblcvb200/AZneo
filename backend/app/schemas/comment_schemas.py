@@ -1,4 +1,5 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, field_validator
+from backend.app.storage.storage_service import StorageService
 
 class CommentAuthor(BaseModel):
     id_user: int
@@ -16,6 +17,17 @@ class CommentOut(BaseModel):
     user: CommentAuthor
 
     model_config = ConfigDict(from_attributes=True)
+
+    @field_validator("image_url")
+    @classmethod
+    def convert_image_url(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+    
+        if value.startswith("comments/"):
+            return StorageService().get_image_url(value)
+    
+        return value
 
 
 class CommentPagination(BaseModel):
