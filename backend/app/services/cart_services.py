@@ -8,7 +8,7 @@ class CartServices:
         self.session = session
 
     def recalculate_total(self, id_cart: int):
-        total = (self.session.query(func.sum(Item_Cart.quantity * Item_Cart.unit_price)).filter(Item_Cart.id_cart == id_cart).scalar())
+        total = (self.session.query(func.coalesce(func.sum(Item_Cart.quantity * Item_Cart.unit_price)).filter(Item_Cart.id_cart == id_cart).scalar()))
         cart = self.session.query(Cart).filter(Cart.id_cart == id_cart).first()
         cart.total = total
 

@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from sqlalchemy import Column, String, Numeric, Integer, ForeignKey, DateTime, CheckConstraint
+from sqlalchemy import Column, String, Numeric, Integer, ForeignKey, DateTime, CheckConstraint, Boolean
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import JSONB
 from backend.app.db.db import Base
@@ -145,8 +145,8 @@ class Order(Base):
      id_address = Column("id_address", Integer, ForeignKey("addresses.id_address"))
      contact_name = Column("contact_name", String, nullable=False)
      contact_email = Column("contact_email", String, nullable=False)
-     contact_number = Column("contact_number", String, nullable=False)
-     contact_cpf = Column("contact_cpf", String, nullable=False)
+     contact_document = Column("contact_document", String(14), nullable=False)
+     is_company = Column("is_company", Boolean, nullable=False, default=False)
      subtotal = Column("subtotal", Numeric(10, 2), nullable=False)
      total_items = Column("total_items", Integer, nullable=False)
      shipping_cost = Column("shipping_cost", Numeric(10, 2), nullable=False)
@@ -157,13 +157,13 @@ class Order(Base):
      discount_amount = Column("discount_amount", Numeric(10, 2), nullable=False, default=0)
      status = Column("status", String, nullable=False, default="Pendente")
 
-     def __init__(self, id_user, id_address, contact_name, contact_email, contact_number, contact_cpf, subtotal, total_items, shipping_cost, total_price, shipping_address, coupon_code, discount_amount=0, status="Pendente"):
+     def __init__(self, id_user, id_address, contact_name, contact_email, contact_document, is_company, subtotal, total_items, shipping_cost, total_price, shipping_address, coupon_code, discount_amount=0, status="Pendente"):
                self.id_user = id_user
                self.id_address = id_address
                self.contact_name = contact_name
                self.contact_email = contact_email
-               self.contact_number = contact_number
-               self.contact_cpf = contact_cpf
+               self.contact_document = contact_document
+               self.is_company = is_company
                self.subtotal = subtotal
                self.total_items = total_items
                self.shipping_cost = shipping_cost
