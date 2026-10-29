@@ -23,13 +23,19 @@ export default function CartPage({ onBack, onCartChange, onRequireAuth }) {
   const loadCart = async () => {
     setLoading(true);
     setError("");
+
     try {
       const data = await getCart();
       setCart(data);
-      if (onCartChange) onCartChange(data);
+
+      if (onCartChange) {
+        onCartChange(data);
+      }
     } catch (err) {
       if (err.status === 401) {
-        if (onRequireAuth) onRequireAuth();
+        if (onRequireAuth) {
+          onRequireAuth();
+        }
       } else {
         setError(err.message);
       }
@@ -45,11 +51,17 @@ export default function CartPage({ onBack, onCartChange, onRequireAuth }) {
 
   const handleQuantityChange = async (itemId, quantity) => {
     if (quantity < 1) return;
+
     setPendingItemId(itemId);
+    setError("");
+
     try {
       const data = await updateCartItem(itemId, quantity);
       setCart(data);
-      if (onCartChange) onCartChange(data);
+
+      if (onCartChange) {
+        onCartChange(data);
+      }
     } catch (err) {
       setError(err.message);
     } finally {
@@ -59,10 +71,15 @@ export default function CartPage({ onBack, onCartChange, onRequireAuth }) {
 
   const handleRemove = async (itemId) => {
     setPendingItemId(itemId);
+    setError("");
+
     try {
       const data = await removeCartItem(itemId);
       setCart(data);
-      if (onCartChange) onCartChange(data);
+
+      if (onCartChange) {
+        onCartChange(data);
+      }
     } catch (err) {
       setError(err.message);
     } finally {
@@ -76,7 +93,11 @@ export default function CartPage({ onBack, onCartChange, onRequireAuth }) {
     <div className="az-catalog">
       <header className="az-topbar">
         <div className="az-topbar-row">
-          <button type="button" className="az-back-link" onClick={onBack}>
+          <button
+            type="button"
+            className="az-back-link"
+            onClick={onBack}
+          >
             ← Continuar comprando
           </button>
         </div>
@@ -96,9 +117,21 @@ export default function CartPage({ onBack, onCartChange, onRequireAuth }) {
         {!loading && !error && items.length === 0 && (
           <div className="az-catalog-state">
             <div className="az-empty-state">
-              <img src={cartIcon} alt="" className="az-cart-empty-icon" />
-              <p className="az-sub mb-3">Seu carrinho está vazio.</p>
-              <button className="btn az-btn" onClick={onBack}>
+              <img
+                src={cartIcon}
+                alt=""
+                className="az-cart-empty-icon"
+              />
+
+              <p className="az-sub mb-3">
+                Seu carrinho está vazio.
+              </p>
+
+              <button
+                type="button"
+                className="btn az-btn az-cart-catalog-btn"
+                onClick={onBack}
+              >
                 Ver catálogo
               </button>
             </div>
@@ -122,14 +155,22 @@ export default function CartPage({ onBack, onCartChange, onRequireAuth }) {
             </div>
 
             <div className="az-cart-summary">
-              <div className="az-cart-summary-title">Resumo</div>
+              <div className="az-cart-summary-title">
+                Resumo
+              </div>
+
               <div className="az-cart-summary-row">
                 <span>Total</span>
+
                 <span className="az-cart-summary-total">
-                  {currencyFormatter.format(cart.total)}
+                  {currencyFormatter.format(Number(cart.total) || 0)}
                 </span>
               </div>
-              <button className="btn az-btn w-100 mt-3">
+
+              <button
+                type="button"
+                className="btn az-btn w-100 mt-3"
+              >
                 Finalizar compra
               </button>
             </div>
@@ -140,9 +181,14 @@ export default function CartPage({ onBack, onCartChange, onRequireAuth }) {
   );
 }
 
-function CartItemRow({ item, pending, onQuantityChange, onRemove }) {
+function CartItemRow({
+  item,
+  pending,
+  onQuantityChange,
+  onRemove,
+}) {
   const product = item.product;
-  const subtotal = item.unit_price * item.quantity;
+  const subtotal = Number(item.unit_price) * item.quantity;
 
   return (
     <div className={`az-cart-item ${pending ? "pending" : ""}`}>
@@ -150,18 +196,26 @@ function CartItemRow({ item, pending, onQuantityChange, onRemove }) {
         {product?.image_url ? (
           <img
             src={resolveImageUrl(product.image_url)}
-            alt={product.product_name}
+            alt={product.product_name || "Produto"}
           />
         ) : (
-          <div className="az-product-image-placeholder mono">SEM IMAGEM</div>
+          <div className="az-product-image-placeholder mono">
+            SEM IMAGEM
+          </div>
         )}
       </div>
 
       <div className="az-cart-item-info">
-        <div className="az-product-brand mono">{product?.brand}</div>
-        <div className="az-cart-item-name">{product?.product_name}</div>
+        <div className="az-product-brand mono">
+          {product?.brand}
+        </div>
+
+        <div className="az-cart-item-name">
+          {product?.product_name}
+        </div>
+
         <div className="az-cart-item-unit-price">
-          {currencyFormatter.format(item.unit_price)} un.
+          {currencyFormatter.format(Number(item.unit_price) || 0)} un.
         </div>
       </div>
 
@@ -171,15 +225,19 @@ function CartItemRow({ item, pending, onQuantityChange, onRemove }) {
           className="az-qty-btn"
           disabled={pending || item.quantity <= 1}
           onClick={() => onQuantityChange(item.quantity - 1)}
+          aria-label="Diminuir quantidade"
         >
           −
         </button>
+
         <span className="mono">{item.quantity}</span>
+
         <button
           type="button"
           className="az-qty-btn"
           disabled={pending}
           onClick={() => onQuantityChange(item.quantity + 1)}
+          aria-label="Aumentar quantidade"
         >
           +
         </button>
@@ -208,6 +266,7 @@ function CartSkeleton() {
       {Array.from({ length: 3 }).map((_, i) => (
         <div className="az-cart-item az-skeleton" key={i}>
           <div className="az-cart-item-image az-skeleton-block" />
+
           <div className="az-cart-item-info">
             <div className="az-skeleton-line short" />
             <div className="az-skeleton-line medium" />

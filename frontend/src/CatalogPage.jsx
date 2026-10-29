@@ -97,7 +97,10 @@ export default function CatalogPage({
 }) {
   const [products, setProducts] = useState([]);
 
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(() => {
+    const parametros = new URLSearchParams(window.location.search);
+    return Number(parametros.get("page")) || 1;
+});
   const [totalPages, setTotalPages] = useState(0);
   const [totalProducts, setTotalProducts] = useState(0);
 
@@ -165,12 +168,6 @@ export default function CatalogPage({
             : []
         );
 
-        setPage(
-          Number.isInteger(data?.page)
-            ? data.page
-            : page
-        );
-
         setTotalPages(
           Number.isInteger(data?.total_pages)
             ? data.total_pages
@@ -208,6 +205,17 @@ export default function CatalogPage({
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, onRequireAuth]);
+
+  // Mantém a página atual na URL para restaurá-la após atualizar (F5).
+  useEffect(() => {
+    const parametros = new URLSearchParams(window.location.search);
+    parametros.set("page", String(page));
+
+    const query = parametros.toString();
+    const novaUrl = `${window.location.pathname}?${query}${window.location.hash}`;
+
+    window.history.replaceState(null, "", novaUrl);
+  }, [page]);
 
   /*
    * BUSCA
@@ -1079,7 +1087,7 @@ function ProductCard({
             ? "Indisponível"
             : adding
             ? "Adicionando..."
-            : "Comprar"}
+            : "Adicionar ao carrinho"}
         </button>
       </div>
     </div>

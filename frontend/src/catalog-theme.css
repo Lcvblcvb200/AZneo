@@ -3007,3 +3007,52 @@
   background: #dc3545;
   color: #fff;
 }
+
+
+/* =====================================================
+   BOTÕES COM CORES SÓLIDAS — SEM DEGRADÊ
+   ===================================================== */
+
+.az-catalog .az-btn,
+.az-catalog .az-product-btn,
+.az-catalog .az-topbar-add,
+.az-catalog .az-category-hero-button,
+.az-catalog .az-category-button.active,
+.az-catalog .az-pagination-number.active,
+.az-catalog input[type="file"]::file-selector-button {
+  background: #20c7df !important;
+  background-image: none !important;
+  color: #071018 !important;
+  border-color: #20c7df;
+  box-shadow: none;
+}
+
+.az-catalog .az-btn:hover,
+.az-catalog .az-product-btn:hover:not(:disabled),
+.az-catalog .az-topbar-add:hover,
+.az-catalog .az-category-hero-button:hover,
+.az-catalog .az-category-button.active:hover,
+.az-catalog .az-pagination-number.active:hover,
+.az-catalog input[type="file"]::file-selector-button:hover {
+  background: #18b4cb !important;
+  background-image: none !important;
+  color: #071018 !important;
+  border-color: #18b4cb;
+  filter: none;
+}
+
+.az-catalog .az-product-btn {
+  width: 100%;
+  border: 0;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+.az-catalog .az-product-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.az-catalog .az-category-button.active svg {
+  color: #071018;
+}

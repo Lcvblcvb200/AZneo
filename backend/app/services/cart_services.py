@@ -1,16 +1,24 @@
 from fastapi import HTTPException
 from sqlalchemy.orm import Session, joinedload
 from backend.app.models.models import Cart, Item_Cart, Product
-from sqlalchemy import func
 
 class CartServices:
     def __init__(self, session: Session):
         self.session = session
 
     def recalculate_total(self, id_cart: int):
-        total = (self.session.query(func.coalesce(func.sum(Item_Cart.quantity * Item_Cart.unit_price)).filter(Item_Cart.id_cart == id_cart).scalar()))
+        items = (self.session.query(Item_Cart).options(joinedload(Item_Cart.product)).filter(Item_Cart.id_cart == id_cart).all())
+        total = 0
+        for item in items:
+            if item.product:
+                item.unit_price = item.product.price
+                total += item.quantity * item.unit_price
         cart = self.session.query(Cart).filter(Cart.id_cart == id_cart).first()
-        cart.total = total
+        if cart:
+            cart.total = total
+
+        self.session.commit()
+        self.session.refresh(cart)
 
     def get_owned_item(self, id_user: int, id_item: int) -> Item_Cart:
         item = (self.session.query(Item_Cart).join(Cart, Cart.id_cart == Item_Cart.id_cart).filter(Item_Cart.id_item == id_item, Cart.id_user == id_user).first())
@@ -23,6 +31,10 @@ class CartServices:
         if not cart:
             cart = Cart(id_user, 0)
             self.session.add(cart)
+            self.session.commit()
+            self.session.refresh(cart)
+        else:
+            self.recalculate_total(cart.id_cart)
             self.session.commit()
             self.session.refresh(cart)
         return cart
