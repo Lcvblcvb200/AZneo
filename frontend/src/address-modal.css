@@ -1,0 +1,281 @@
+
+.az-address-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.75);
+  padding: 20px;
+}
+
+.az-address-modal {
+  width: 100%;
+  max-width: 550px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  background: #151e29;
+  color: #f5f7fa;
+  border: 1px solid #344150;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 20px 70px rgba(0, 0, 0, 0.55);
+}
+
+.az-address-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px;
+  border-bottom: 1px solid #344150;
+}
+
+.az-address-header h2 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.az-address-close {
+  border: none;
+  background: transparent;
+  color: #aab6c4;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.az-address-content {
+  padding: 24px;
+  overflow-y: auto;
+  max-height: 55vh;
+}
+
+.az-address-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.az-address-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 17px;
+  background: #1c2835;
+  border: 1px solid #344150;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.az-address-option:hover,
+.az-address-option.selected {
+  border-color: #24c7e5;
+}
+
+.az-address-option.selected {
+  background: #1a3440;
+}
+
+.az-address-option input {
+  width: 17px;
+  height: 17px;
+  margin-top: 3px;
+  accent-color: #24c7e5;
+}
+
+.az-address-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.az-address-info strong {
+  color: white;
+  font-size: 14px;
+}
+
+.az-address-info span {
+  color: #c1cbd6;
+  font-size: 13px;
+}
+
+.az-address-info small {
+  color: #91a2b5;
+  font-size: 12px;
+}
+
+.az-address-empty {
+  padding: 20px 0;
+  color: #aab6c4;
+  text-align: center;
+  font-size: 14px;
+}
+
+.az-address-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 20px 24px;
+  border-top: 1px solid #344150;
+}
+
+.az-address-primary,
+.az-address-secondary {
+  padding: 12px 18px;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.az-address-primary {
+  background: #22c5df;
+  color: #061017;
+}
+
+.az-address-primary:hover {
+  background: #55d8ed;
+}
+
+.az-address-secondary {
+  background: #2a3949;
+  color: #e3edf7;
+}
+
+.az-address-secondary:hover {
+  background: #374b60;
+}
+
+.az-address-primary:disabled,
+.az-address-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.az-address-error {
+  padding: 12px 24px;
+  background: #422329;
+  color: #ffacac;
+  font-size: 13px;
+}
+
+.az-address-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.az-address-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.az-address-field label {
+  font-size: 12px;
+  color: #bcc9d6;
+}
+
+.az-address-field input {
+  width: 100%;
+  padding: 12px;
+  background: #0e1720;
+  color: white;
+  border: 1px solid #344150;
+  border-radius: 7px;
+  outline: none;
+}
+
+.az-address-field input:focus {
+  border-color: #24c7e5;
+}
+
+.az-address-field input::placeholder {
+  color: #718294;
+}
+
+.az-address-field-logradouro,
+.az-address-field-complement {
+  grid-column: span 2;
+}
+
+/* Botão no cabeçalho do catálogo */
+
+.az-header-address {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: #b9c9d8;
+  cursor: pointer;
+  text-align: left;
+  min-width: 0;
+  max-width: 230px;
+}
+
+.az-header-address:hover {
+  border-color: #344150;
+  background: #182431;
+}
+
+.az-header-address-icon {
+  font-size: 20px;
+  color: #22c5df;
+  flex-shrink: 0;
+}
+
+.az-header-address-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.az-header-address-text small {
+  color: #8295a7;
+  font-size: 10px;
+}
+
+.az-header-address-text strong {
+  font-size: 12px;
+  color: #d8e6f3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 550px) {
+  .az-address-header,
+  .az-address-content,
+  .az-address-footer {
+    padding: 18px;
+  }
+
+  .az-address-form {
+    grid-template-columns: 1fr;
+  }
+
+  .az-address-field-logradouro,
+  .az-address-field-complement {
+    grid-column: span 1;
+  }
+
+  .az-address-footer {
+    flex-direction: column;
+  }
+
+  .az-address-primary,
+  .az-address-secondary {
+    width: 100%;
+  }
+
+  .az-header-address {
+    max-width: 170px;
+  }
+}

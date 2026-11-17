@@ -6,7 +6,7 @@ import ProductDetailPage from "./ProductDetailPage.jsx";
 import ProductFormPage from "./ProductFormPage.jsx";
 import CartPage from "./CartPage.jsx";
 import SignUpCompanyPage from "./SignUpCompanyPage.jsx";
-
+import AddressModal from "./AddressModal.jsx";
 import PrivacyPolicyPage from "./PrivacyPolicyPage.jsx";
 import TermsOfUsePage from "./TermsOfUsePage.jsx";
 
@@ -43,6 +43,9 @@ export default function App() {
   // -------------------------------------------------------
   // TELA ATUAL
   // -------------------------------------------------------
+
+  const [showAddressModal, setShowAddressModal] = useState(false);
+  const [selectedAddress, setSelectedAddress] = useState(null);
 
   const [screen, setScreen] = useState(() => {
     return getAccessToken()
@@ -582,8 +585,8 @@ export default function App() {
   // =========================================================
 
   return (
-
-    <CatalogPage
+    <>
+      <CatalogPage
 
       onRequireAuth={() => {
 
@@ -637,8 +640,18 @@ export default function App() {
       cartCount={
         cartCount
       }
+      selectedAddress={selectedAddress}
+      onOpenAddresses={() => setShowAddressModal(true)}
 
-    />
+      />
 
+      {showAddressModal && (
+        <AddressModal
+          selectedAddress={selectedAddress}
+          onSelect={setSelectedAddress}
+          onClose={() => setShowAddressModal(false)}
+        />
+      )}
+    </>
   );
 }

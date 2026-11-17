@@ -290,3 +290,25 @@ export function deleteComment(commentId) {
     },
   });
 }
+
+export function getAddresses() {
+  const token = getAccessToken();
+
+  return request("/addresses", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
+
+export function createAddress(data) {
+  const token = getAccessToken();
+
+  return request("/addresses/create", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+}

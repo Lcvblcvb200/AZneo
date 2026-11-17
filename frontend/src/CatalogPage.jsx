@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./catalog-theme.css";
+import "./address-modal.css";
 import bannerTeclados from "./assets/banner-teclados.png";
 import bannerMouses from "./assets/banner-mouses.png";
 import bannerHardwares from "./assets/banner-hardwares.png";
@@ -94,6 +95,8 @@ export default function CatalogPage({
   onOpenCart,
   onCartChange,
   cartCount = 0,
+  selectedAddress,
+  onOpenAddresses,
 }) {
   const [products, setProducts] = useState([]);
 
@@ -542,6 +545,31 @@ const baseList =
               )}
             </button>
           )}
+
+          {!needsAuth && onOpenAddresses && (
+            <div className="az-topbar-address-slot">
+            <button
+              type="button"
+              className="az-header-address"
+              onClick={onOpenAddresses}
+              aria-label="Escolher endereço de entrega"
+              title="Escolher endereço de entrega"
+            >
+              <span className="az-header-address-icon" aria-hidden="true">
+                ⌖
+              </span>
+              <span className="az-header-address-text">
+                <small>Enviar para</small>
+                <strong>
+                  {selectedAddress
+                    ? `${selectedAddress.city}/${selectedAddress.state}`
+                    : "Adicionar endereço"}
+                </strong>
+              </span>
+            </button>
+            </div>
+          )}
+
 
           {!needsAuth && (
             <button
