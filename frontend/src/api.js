@@ -312,3 +312,15 @@ export function createAddress(data) {
     body: JSON.stringify(data),
   });
 }
+
+export function createOrder(idAddress, couponCode = null) {
+  const token = getAccessToken();
+  return request("/orders/checkout", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` },
+    body: JSON.stringify({
+      id_address: idAddress,
+      coupon_code: couponCode || null,
+    }),
+  });
+}

@@ -54,7 +54,7 @@ export default function Checkout({ selectedAddress, onOpenAddresses, onBack, onR
 
   // Após o cadastro pelo modal, o endereço selecionado já estará no App.
   // Mantemos um fallback para selecionar endereços cadastrados anteriormente.
-  const activeAddress = selectedAddress || null;
+  const activeAddress = selectedAddress || (addresses.length === 1 ? addresses[0] : null);
   const cartItems = cart?.items ?? [];
   const subtotal = cartItems.reduce(
     (sum, item) => sum + Number(item.product?.price ?? item.unit_price ?? 0) * item.quantity, 0
@@ -112,7 +112,7 @@ export default function Checkout({ selectedAddress, onOpenAddresses, onBack, onR
 
       {error && <div className="az-checkout-error" role="alert">{error}</div>}
 
-      <form className="az-checkout-grid" onSubmit={handleSubmit}>
+      {!cart && error ? null : <form className="az-checkout-grid" onSubmit={handleSubmit}>
         <div className="az-checkout-sections">
           <section className="az-checkout-panel">
             <h2><span className="az-checkout-num">01</span> CONTATO</h2>
@@ -192,7 +192,7 @@ export default function Checkout({ selectedAddress, onOpenAddresses, onBack, onR
           </button>
           <small className="az-checkout-muted">Nenhuma cobrança será realizada nesta etapa.</small>
         </aside>
-      </form>
+      </form>}
     </main>
   );
 }

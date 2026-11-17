@@ -7,6 +7,7 @@ import ProductFormPage from "./ProductFormPage.jsx";
 import CartPage from "./CartPage.jsx";
 import SignUpCompanyPage from "./SignUpCompanyPage.jsx";
 import AddressModal from "./AddressModal.jsx";
+import Checkout from "./Checkout.jsx";
 import PrivacyPolicyPage from "./PrivacyPolicyPage.jsx";
 import TermsOfUsePage from "./TermsOfUsePage.jsx";
 
@@ -565,6 +566,8 @@ export default function App() {
           handleCartChange
         }
 
+        onCheckout={() => setScreen("checkout")}
+
         onRequireAuth={() => {
 
           setProfile(null);
@@ -579,6 +582,35 @@ export default function App() {
     );
   }
 
+
+  // =========================================================
+  // CHECKOUT
+  // =========================================================
+
+  if (screen === "checkout") {
+    return (
+      <>
+        <Checkout
+          selectedAddress={selectedAddress}
+          onOpenAddresses={() => setShowAddressModal(true)}
+          onBack={() => setScreen("cart")}
+          onRequireAuth={() => {
+            setShowAddressModal(false);
+            setProfile(null);
+            setIsAdmin(false);
+            setScreen("auth");
+          }}
+        />
+        {showAddressModal && (
+          <AddressModal
+            selectedAddress={selectedAddress}
+            onSelect={setSelectedAddress}
+            onClose={() => setShowAddressModal(false)}
+          />
+        )}
+      </>
+    );
+  }
 
   // =========================================================
   // CATÁLOGO
