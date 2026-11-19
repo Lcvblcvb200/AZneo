@@ -49,6 +49,8 @@ class CartServices:
         if item:
             item.quantity += quantity
         else:
+            if product.stock == 0:
+                raise HTTPException(status_code=403, detail="Empty Stock")
             item_added = Item_Cart(cart.id_cart, id_product, quantity, product.price)
             self.session.add(item_added)
         self.recalculate_total(cart.id_cart)
@@ -57,6 +59,8 @@ class CartServices:
 
     def update_item(self, id_user: int, id_item: int, quantity: int) -> Cart:
         item = self.get_owned_item(id_user, id_item)
+        if item.stock == 0:
+            raise HTTPException(status_code=403, detail="Stock Empty")
         item.quantity = quantity
         self.recalculate_total(item.id_cart)
         self.session.commit()

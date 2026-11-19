@@ -5,9 +5,7 @@ from sqlalchemy.orm import Session
 from backend.app.core.security import token_verify, is_admin
 from backend.app.services.products_services import ProductService
 from backend.app.services.comment_services import CommentServices
-from backend.app.models.models import Product
 from backend.app.models.models import User
-from sqlalchemy import text
 
 productroute = APIRouter(prefix="/products", tags=["products"])
 
@@ -18,18 +16,10 @@ def register_product(name: str = Form(...), description: str = Form(...), brand:
     return registered_product
 
 @productroute.get("/view", response_model=ProductPagination)
-def view_products(session: Session = Depends(getsession), user: User = Depends(token_verify), page: int = 1, limit: int = 5):
+def view_products(session: Session = Depends(getsession), user: User = Depends(token_verify), page: int = 1, limit: int = 15):
     product_service = ProductService(session)
     product_list = product_service.get_products(page, limit)
     return product_list
-
-@productroute.get("/debug/db-test")
-def orm_users(session: Session = Depends(getsession)):
-    try:
-        rows = session.query(Product).limit(5).all()
-        return {"read_ok": True, "count": len(rows)}
-    except Exception as e:
-        return {"read_ok": False, "error": str(e)}
 
 @productroute.get("/search", response_model=list[ProductOut])
 def view_products_by_name(name: str, session: Session = Depends(getsession), user: User = Depends(token_verify)):

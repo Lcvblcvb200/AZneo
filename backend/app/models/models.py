@@ -143,6 +143,7 @@ class Order(Base):
      id_order = Column("id_order", Integer, primary_key=True, autoincrement=True, nullable=False)
      id_user = Column("id_user", Integer, ForeignKey("users.id_user"), nullable=False)
      id_address = Column("id_address", Integer, ForeignKey("addresses.id_address"))
+     id_code = Column("id_code", Integer, ForeignKey("codes.id_code"), nullable=True)
      contact_name = Column("contact_name", String, nullable=False)
      contact_email = Column("contact_email", String, nullable=False)
      contact_document = Column("contact_document", String(14), nullable=False)
@@ -157,7 +158,7 @@ class Order(Base):
      discount_amount = Column("discount_amount", Numeric(10, 2), nullable=False, default=0)
      status = Column("status", String, nullable=False, default="Pendente")
 
-     def __init__(self, id_user, id_address, contact_name, contact_email, contact_document, is_company, subtotal, total_items, shipping_cost, total_price, shipping_address, coupon_code, discount_amount=0, status="Pendente"):
+     def __init__(self, id_user, id_address, contact_name, contact_email, contact_document, is_company, subtotal, total_items, shipping_cost, total_price, shipping_address, coupon_code=None, discount_amount=0, status="Pendente", id_code=None):
                self.id_user = id_user
                self.id_address = id_address
                self.contact_name = contact_name
@@ -172,10 +173,12 @@ class Order(Base):
                self.coupon_code = coupon_code
                self.discount_amount = discount_amount
                self.status = status
+               self.id_code = id_code
 
      user = relationship("User", back_populates="orders")
      address = relationship("Address", back_populates="orders")
      items = relationship("Item_Order", back_populates="order")
+     coupon = relationship("Codes", back_populates="orders")
 
 class Item_Order(Base):
      __tablename__ = "item_order"
@@ -200,3 +203,45 @@ class Item_Order(Base):
 
      order = relationship("Order", back_populates="items")
      product = relationship("Product")
+
+class Codes(Base):
+    __tablename__ = "codes"
+    __table_args__ = (
+    CheckConstraint("discount >= 0", name="ck_codes_discount"),
+    CheckConstraint(
+        "discount_type IN ('percentage', 'fixed')",
+        name="ck_codes_discount_type"
+    ),
+    CheckConstraint(
+        "discount_type != 'percentage' OR discount <= 100",
+        name="ck_codes_percentage"
+    ),
+    CheckConstraint(
+        "usage_limit IS NULL OR usage_limit > 0",
+        name="ck_codes_usage_limit"
+    ),
+    CheckConstraint("used_count >= 0", name="ck_codes_used_count"),
+    CheckConstraint("minimum_order >= 0", name="ck_codes_minimum_order")
+)
+    id_code = Column(Integer, primary_key=True, autoincrement=True)
+    code = Column(String, unique=True, nullable=False)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    discount = Column(Numeric(10, 2), nullable=False)
+    discount_type = Column(String, nullable=False)
+    expires_at = Column(DateTime(timezone=True), nullable=True)
+    usage_limit = Column(Integer, nullable=True)
+    used_count = Column(Integer, nullable=False, default=0)
+    minimum_order = Column(Numeric(10, 2), nullable=False, default=0)
+    is_active = Column(Boolean, nullable=False, default=True)
+
+    def __init__(self, code, discount, discount_type, expires_at=None, usage_limit=None, minimum_order=0, is_active=True):
+              self.code = code
+              self.discount = discount
+              self.discount_type = discount_type
+              self.expires_at = expires_at
+              self.usage_limit = usage_limit
+              self.used_count = 0
+              self.minimum_order = minimum_order
+              self.is_active = is_active
+
+    orders = relationship("Order", back_populates="coupon", cascade="all, delete-orphan")
