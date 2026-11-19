@@ -83,13 +83,50 @@ export default function Checkout({ selectedAddress, onOpenAddresses, onBack, onR
     }
   }
 
-  if (loading) return <main className="az-checkout"><p>Carregando checkout...</p></main>;
+  
+if (loading) return (
+  <main className="az-checkout az-checkout-loading">
+    <section className="az-loading-content">
+
+      <div className="az-loading-logo">
+        AZ<span>NEO</span>
+      </div>
+
+      <div className="az-loading-spinner">
+        <div className="az-loading-spinner-inner"></div>
+      </div>
+
+      <h1>Preparando seu checkout</h1>
+
+      <p>
+        Estamos organizando as informações do seu pedido.
+        Só mais um instante...
+      </p>
+
+      <div className="az-loading-progress">
+        <span></span>
+      </div>
+
+      <div className="az-loading-status">
+        <span className="az-loading-dot"></span>
+        CARREGANDO INFORMAÇÕES
+      </div>
+
+      <div className="az-loading-security">
+        <span>✓</span>
+        Ambiente seguro AZNEO
+      </div>
+
+    </section>
+  </main>
+);
+
 
   if (order) return (
     <main className="az-checkout">
       <section className="az-checkout-success">
         <div className="az-checkout-success-icon">✓</div>
-        <h1>Pedido #{order.id_order} criado</h1>
+        <h1>Pedido criado</h1>
         <p>Seu pedido foi registrado e está aguardando pagamento.</p>
         <div className="az-checkout-success-line"><span>Status</span><strong>{order.status}</strong></div>
         <div className="az-checkout-success-line"><span>Subtotal</span><strong>{formatMoney(order.subtotal)}</strong></div>

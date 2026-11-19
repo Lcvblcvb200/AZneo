@@ -39,3 +39,215 @@
 .az-checkout-success .az-checkout-primary{margin-top:20px}
 @media(max-width:850px){.az-checkout-grid{grid-template-columns:1fr}.az-checkout-summary{position:static}}
 @media(max-width:520px){.az-checkout{padding:25px 14px 60px}.az-checkout-panel,.az-checkout-summary{padding:18px}.az-checkout-contact div{grid-template-columns:1fr;gap:4px}.az-checkout-total strong{font-size:19px}}
+
+/* ========================================
+   CHECKOUT - TELA DE CARREGAMENTO
+======================================== */
+
+.az-checkout-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 30px 20px;
+    overflow: hidden;
+    position: relative;
+    background:
+        radial-gradient(
+            circle at 50% 45%,
+            rgba(22, 119, 143, 0.13),
+            transparent 38%
+        ),
+        #090e14;
+}
+
+.az-loading-content {
+    width: 100%;
+    max-width: 430px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    animation: az-loading-appear .7s ease both;
+}
+
+.az-loading-logo {
+    font-size: 25px;
+    font-weight: 900;
+    letter-spacing: 4px;
+    color: #f2fbff;
+    margin-bottom: 48px;
+}
+
+.az-loading-logo span {
+    color: #27d3ed;
+}
+
+/* Círculo animado */
+
+.az-loading-spinner {
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    border: 3px solid rgba(40, 205, 231, .10);
+    border-top-color: #29d5ee;
+    border-right-color: #168da8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: az-loading-rotate 1.2s linear infinite;
+    box-shadow: 0 0 30px rgba(34, 197, 223, .08);
+}
+
+.az-loading-spinner-inner {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    border: 2px solid rgba(40, 205, 231, .12);
+    border-bottom-color: #29d5ee;
+}
+
+/* Textos */
+
+.az-loading-content h1 {
+    color: #f2f9fd;
+    font-size: 21px;
+    font-weight: 800;
+    margin: 32px 0 10px;
+    letter-spacing: .3px;
+}
+
+.az-loading-content > p {
+    max-width: 340px;
+    color: #8ea3b5;
+    font-size: 13px;
+    line-height: 1.7;
+    margin: 0;
+}
+
+/* Barra de progresso */
+
+.az-loading-progress {
+    width: 100%;
+    max-width: 280px;
+    height: 4px;
+    margin-top: 32px;
+    background: #1c2b37;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.az-loading-progress span {
+    display: block;
+    width: 40%;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(
+        90deg,
+        #168da8,
+        #36e0f4,
+        #168da8
+    );
+    box-shadow: 0 0 12px rgba(39, 211, 237, .65);
+    animation: az-loading-progress 1.8s ease-in-out infinite;
+}
+
+/* Status */
+
+.az-loading-status {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-top: 19px;
+    color: #5dcde0;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+.az-loading-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #35d9ed;
+    box-shadow: 0 0 10px #35d9ed;
+    animation: az-loading-pulse 1.2s ease-in-out infinite;
+}
+
+/* Segurança */
+
+.az-loading-security {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 55px;
+    color: #647d8e;
+    font-size: 11px;
+}
+
+.az-loading-security span {
+    color: #36d8b0;
+    font-weight: 900;
+}
+
+/* Animações */
+
+@keyframes az-loading-rotate {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes az-loading-progress {
+    0% {
+        transform: translateX(-110%);
+    }
+
+    100% {
+        transform: translateX(280%);
+    }
+}
+
+@keyframes az-loading-pulse {
+    50% {
+        opacity: .3;
+        transform: scale(.75);
+    }
+}
+
+@keyframes az-loading-appear {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 480px) {
+    .az-loading-logo {
+        margin-bottom: 38px;
+    }
+
+    .az-loading-content h1 {
+        font-size: 19px;
+    }
+
+    .az-loading-security {
+        margin-top: 42px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .az-loading-content,
+    .az-loading-spinner,
+    .az-loading-progress span,
+    .az-loading-dot {
+        animation: none;
+    }
+}
