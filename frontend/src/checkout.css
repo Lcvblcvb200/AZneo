@@ -82,7 +82,7 @@
 }
 
 .az-loading-logo span {
-    color: #27d3ed;
+    color: #29d5ee;
 }
 
 /* Círculo animado */
@@ -144,12 +144,9 @@
     width: 40%;
     height: 100%;
     border-radius: inherit;
-    background: linear-gradient(
-        90deg,
-        #168da8,
-        #36e0f4,
-        #168da8
-    );
+    background: #29d5ee;
+    box-shadow: 0 0 12px rgba(41, 213, 238, .35);
+    animation: az-loading-progress 1.8s ease-in-out infinite;
     box-shadow: 0 0 12px rgba(39, 211, 237, .65);
     animation: az-loading-progress 1.8s ease-in-out infinite;
 }

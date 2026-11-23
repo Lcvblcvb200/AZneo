@@ -10,6 +10,9 @@ import AddressModal from "./AddressModal.jsx";
 import Checkout from "./Checkout.jsx";
 import PrivacyPolicyPage from "./PrivacyPolicyPage.jsx";
 import TermsOfUsePage from "./TermsOfUsePage.jsx";
+import CodeDashboard from "./CodeDashboard";
+
+
 
 import {
   getAccessToken,
@@ -611,6 +614,27 @@ export default function App() {
       </>
     );
   }
+  // =========================================================
+// DASHBOARD DE CUPONS
+// =========================================================
+
+if (screen === "codes" && isAdmin) {
+  return (
+    <div className="az-admin-codes-page">
+      <div className="az-admin-codes-header">
+        <button
+          type="button"
+          className="btn az-topbar-add"
+          onClick={() => setScreen("catalog")}
+        >
+          ← Voltar ao catálogo
+        </button>
+      </div>
+
+      <CodeDashboard />
+    </div>
+  );
+}
 
   // =========================================================
   // CATÁLOGO
@@ -619,62 +643,40 @@ export default function App() {
   return (
     <>
       <CatalogPage
+        onRequireAuth={() => {
+          setProfile(null);
+          setIsAdmin(false);
+          setScreen("auth");
+        }}
 
-      onRequireAuth={() => {
+        onProductSelect={(slug) => {
+          setSelectedSlug(slug);
+          setScreen("detail");
+        }}
 
-        setProfile(null);
-        setIsAdmin(false);
+        onAddProduct={
+          isAdmin
+            ? () => {
+                setEditingProduct(null);
+                setScreen("form");
+              }
+            : undefined
+        }
 
-        setScreen(
-          "auth"
-        );
-      }}
+        onOpenCodes={
+          isAdmin
+            ? () => setScreen("codes")
+            : undefined
+        }
 
-      onProductSelect={(slug) => {
+        onOpenCart={() => {
+          setScreen("cart");
+        }}
 
-        setSelectedSlug(
-          slug
-        );
-
-        setScreen(
-          "detail"
-        );
-      }}
-
-      onAddProduct={
-        isAdmin
-
-          ? () => {
-
-              setEditingProduct(
-                null
-              );
-
-              setScreen(
-                "form"
-              );
-            }
-
-          : undefined
-      }
-
-      onOpenCart={() => {
-
-        setScreen(
-          "cart"
-        );
-      }}
-
-      onCartChange={
-        handleCartChange
-      }
-
-      cartCount={
-        cartCount
-      }
-      selectedAddress={selectedAddress}
-      onOpenAddresses={() => setShowAddressModal(true)}
-
+        onCartChange={handleCartChange}
+        cartCount={cartCount}
+        selectedAddress={selectedAddress}
+        onOpenAddresses={() => setShowAddressModal(true)}
       />
 
       {showAddressModal && (

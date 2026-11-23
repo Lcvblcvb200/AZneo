@@ -13,6 +13,7 @@ class ProductOut(BaseModel):
     image_url: str | None = None
     slug: str
     category: str
+    is_active: bool
 
     model_config = ConfigDict(from_attributes=True)
 

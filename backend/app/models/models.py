@@ -79,8 +79,9 @@ class Product(Base):
     slug = Column("slug", String, nullable=False, unique=True)
     barcode = Column("barcode", String, unique=True, nullable=False)
     category = Column("category", String, nullable=False)
+    is_active = Column(Boolean, nullable=False, default=True)
 
-    def __init__(self, product_name, description, brand, price, image_url, stock, slug, barcode, category):
+    def __init__(self, product_name, description, brand, price, image_url, stock, slug, barcode, category, is_active=True):
         self.product_name = product_name
         self.description = description
         self.brand = brand
@@ -90,6 +91,7 @@ class Product(Base):
         self.slug = slug
         self.barcode = barcode
         self.category = category
+        self.is_active = is_active
 
 class Cart(Base):
     __tablename__ = "carts"

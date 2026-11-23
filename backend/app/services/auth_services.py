@@ -41,6 +41,12 @@ class UserService:
         return token
     
     def get_profile(self, user: str):
+        if user.role == "admin":
+            return {
+            "role": user.role,
+            "name": user.name,
+            "email": user.email
+        }
         if user.role == "customer":
             return {
                 "role": user.role,

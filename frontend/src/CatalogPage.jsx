@@ -94,6 +94,7 @@ export default function CatalogPage({
   onAddProduct,
   onOpenCart,
   onCartChange,
+  onOpenCodes,
   cartCount = 0,
   selectedAddress,
   onOpenAddresses,
@@ -519,15 +520,27 @@ const baseList =
               </div>
             )}
 
-          {!needsAuth && onAddProduct && (
-            <button
-              type="button"
-              className="btn az-topbar-add"
-              onClick={onAddProduct}
-            >
-              + Adicionar produto
-            </button>
-          )}
+                      {/* ADICIONAR PRODUTO — ADMIN */}
+            {!needsAuth && onAddProduct && (
+              <button
+                type="button"
+                className="btn az-topbar-add"
+                onClick={onAddProduct}
+              >
+                + Adicionar produto
+              </button>
+            )}
+
+            {/* DASHBOARD DE CUPONS — ADMIN */}
+            {!needsAuth && onOpenCodes && (
+              <button
+                type="button"
+                className="btn az-topbar-add az-topbar-codes"
+                onClick={onOpenCodes}
+              >
+                Cupons
+              </button>
+            )}
 
           {!needsAuth && onOpenCart && (
             <button
@@ -541,6 +554,11 @@ const baseList =
               {cartCount > 0 && (
                 <span className="az-cart-badge">
                   {cartCount}
+                  onOpenCodes={
+                    isAdmin
+                      ? () => setScreen("codes")
+                      : undefined
+                  }
                 </span>
               )}
             </button>

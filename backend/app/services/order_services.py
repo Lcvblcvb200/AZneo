@@ -18,10 +18,32 @@ class OrderService:
         items = sum(item.quantity for item in cart.items)
 
         for item in cart.items:
+
+            product = item.product
+
+            if not product.is_active:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Produto Deletado: {product.product_name}"
+                )
+
+            if product.stock <= 0:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Produto Fora de Estoque: {product.product_name}"
+                )
+
             if item.quantity <= 0:
-                raise HTTPException(status_code=400, detail="Invalid Quantity")
-            if item.product.stock < item.quantity:
-                raise HTTPException(status_code=400, detail=f"Insufficient Stock: {item.product.product_name}")
+                raise HTTPException(
+                    status_code=400,
+                    detail="Invalid Quantity"
+                )
+
+            if item.quantity > product.stock:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Estoque insuficiente: {product.product_name}"
+                )
 
         subtotal = sum(item.quantity * item.product.price for item in cart.items)
 

@@ -3056,3 +3056,103 @@
 .az-catalog .az-category-button.active svg {
   color: #071018;
 }
+
+/* =====================================================
+   STATUS DOS PRODUTOS NO CARRINHO
+   ===================================================== */
+
+.az-cart-item-invalid {
+  border-color: rgba(255, 90, 90, 0.35);
+}
+
+.az-cart-item-status {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  margin-top: 7px;
+  padding: 4px 9px;
+  border-radius: 5px;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.az-cart-item-status.available {
+  color: #39d98a;
+  background: rgba(57, 217, 138, 0.09);
+  border: 1px solid rgba(57, 217, 138, 0.2);
+}
+
+.az-cart-item-status.out-of-stock,
+.az-cart-item-status.insufficient {
+  color: #ffb84d;
+  background: rgba(255, 184, 77, 0.09);
+  border: 1px solid rgba(255, 184, 77, 0.2);
+}
+
+.az-cart-item-status.deleted,
+.az-cart-item-status.unavailable {
+  color: #ff6969;
+  background: rgba(255, 105, 105, 0.09);
+  border: 1px solid rgba(255, 105, 105, 0.2);
+}
+
+/* =====================================================
+   AVISO DO CHECKOUT
+   ===================================================== */
+
+.az-cart-checkout-warning {
+  margin-top: 1.2rem;
+  padding: 12px;
+  border: 1px solid rgba(255, 184, 77, 0.3);
+  border-radius: 8px;
+  background: rgba(255, 184, 77, 0.06);
+  color: #ffb84d;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.az-cart-checkout-warning strong {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.az-cart-checkout-warning p {
+  margin: 0;
+  color: var(--az-gray);
+}
+
+/* =====================================================
+   BOTÃO DE CHECKOUT DESABILITADO
+   ===================================================== */
+
+.az-cart-summary .az-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  filter: grayscale(0.5);
+}
+
+/* BOTÃO DO DASHBOARD DE CUPONS */
+
+.az-topbar-codes {
+    white-space: nowrap;
+}
+
+/* ÁREA DO DASHBOARD ADMINISTRATIVO */
+
+.az-admin-codes-page {
+    min-height: 100vh;
+    width: 100%;
+    background: var(--az-bg);
+}
+
+.az-admin-codes-header {
+    display: flex;
+    align-items: center;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--az-border);
+    background: var(--az-panel);
+}
+
+.az-admin-codes-header button {
+    min-height: 38px;
+}

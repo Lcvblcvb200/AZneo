@@ -25,7 +25,7 @@ class ProductService:
         return newproduct 
 
     def get_products(self, page: int, limit: int):
-        query = self.session.query(Product)
+        query = self.session.query(Product).filter(Product.is_active == True)
         total_products = query.count()
         products = (query.order_by(Product.id_product.desc()).offset((page - 1) * limit).limit(limit).all())
 
@@ -92,10 +92,10 @@ class ProductService:
         queryproduct = self.session.query(Product).filter(Product.id_product == product_id).first()
         if not queryproduct:
             raise HTTPException(status_code=404, detail="Product not found")
+        if not queryproduct.is_active:
+            raise HTTPException(status_code=400,detail="Product Already Deleted")
+        queryproduct.is_active = False
         paht = queryproduct.image_url
-        self.session.query(Item_Cart).filter(Item_Cart.id_product == product_id).delete(synchronize_session=False)
-        self.session.delete(queryproduct)
         self.session.commit()
-        if paht and paht.startswith("products/"):
-            self.storage.delete_image(paht)
+
         return {"message": "Produto Deletado"}

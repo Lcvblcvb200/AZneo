@@ -31,7 +31,15 @@ class CodeService:
         if data.minimum_order < Decimal("0.00"):
             raise HTTPException(status_code=400, detail="Invalid Minimum Order")
 
-        new_code = Codes(code_name, data.discount, data.discount_type, data.expires_at, data.usage_limit, data.minimum_order, 0, True)
+        new_code = Codes(
+        code=code_name,
+        discount=data.discount,
+        discount_type=data.discount_type,
+        expires_at=data.expires_at,
+        usage_limit=data.usage_limit,
+        minimum_order=data.minimum_order,
+        is_active=True
+    )
 
         self.session.add(new_code)
         self.session.commit()

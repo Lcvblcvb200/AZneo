@@ -18,12 +18,12 @@ def get_codes(session: Session = Depends(getsession), user: User = Depends(is_ad
     code_service = CodeService(session)
     return code_service.get_codes()
 
-@coderoute.get("/{id_code}", response_model=CodeResponse)
+@coderoute.get("/search/{id_code}", response_model=CodeResponse)
 def get_code_by_id(id_code: int, session: Session = Depends(getsession), user: User = Depends(is_admin)):
     code_service = CodeService(session)
     return code_service.get_code_by_id(id_code)
 
-@coderoute.delete("/{id_code}", response_model=CodeResponse)
+@coderoute.delete("/delete/{id_code}", response_model=CodeResponse)
 def deactivate_code(id_code: int, session: Session = Depends(getsession), user: User = Depends(is_admin)):
     code_service = CodeService(session)
     return code_service.deactivate_code(id_code)
