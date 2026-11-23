@@ -5,6 +5,7 @@ from backend.app.routes.cart_routes import cartroute
 from backend.app.routes.comment_routes import commentroute
 from backend.app.routes.order_routes import orderroute
 from backend.app.routes.address_routes import addressroute
+from backend.app.routes.code_routes import coderoute
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 import os
@@ -20,6 +21,7 @@ app.include_router(cartroute)
 app.include_router(commentroute)
 app.include_router(orderroute)
 app.include_router(addressroute)
+app.include_router(coderoute)
 
 app.add_middleware(
     CORSMiddleware,

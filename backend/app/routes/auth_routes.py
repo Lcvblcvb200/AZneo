@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from backend.app.schemas.auth_schemas import SignUpSchema, LoginSchema, SignUpCompanySchema, TokenOut, UserOut
+from backend.app.schemas.auth_schemas import SignUpSchema, LoginSchema, SignUpCompanySchema, TokenOut
 from backend.app.core.db import getsession
 from sqlalchemy.orm import Session
 from backend.app.core.security import token_verify
@@ -35,6 +35,7 @@ def signup_company(body: SignUpCompanySchema, session: Session = Depends(getsess
         "token_type": "Bearer"
     }
 
-@authrouter.get("/profile", response_model=UserOut)
-def profile(user: User = Depends(token_verify)):
-    return user
+@authrouter.get("/profile")
+def profile(user: User = Depends(token_verify), session: Session = Depends(getsession)):
+    user_search = UserService(session)
+    return user_search.get_profile(user)

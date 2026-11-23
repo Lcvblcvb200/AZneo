@@ -39,3 +39,33 @@ class UserService:
         auth_user = autenticate(email, password, self.session)
         token = create_token(auth_user.id_user, auth_user.role)
         return token
+    
+    def get_profile(self, user: str):
+        if user.role == "customer":
+            return {
+                "role": user.role,
+                "name": user.name,
+                "email": user.email,
+                "cpf": user.cpf
+            }
+        
+        elif user.role == "company":
+            company = (self.session.query(UserCompany).filter(UserCompany.id_user == user.id_user).first())
+
+            if not company:
+                raise HTTPException(status_code=404,detail="Company Data Not Found")
+
+            return {
+                "role": user.role,
+                "name": user.name,
+                "email": user.email,
+                "company": {
+                    "trade_name": company.name_f,
+                    "corporate_name": company.name_s,
+                    "cnpj": company.cnpj,
+                    "ie": company.ie
+                }
+            }
+
+        else:
+            raise HTTPException(status_code=400,detail="Invalid User Role")

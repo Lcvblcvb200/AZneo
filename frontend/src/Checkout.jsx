@@ -62,6 +62,27 @@ export default function Checkout({ selectedAddress, onOpenAddresses, onBack, onR
   const itemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const shipping = subtotal >= 200 ? 0 : subtotal >= 100 ? 10 : 20;
   const estimatedTotal = subtotal + shipping;
+  const formatCPF = (cpf) => {
+  if (!cpf) return "—";
+
+  return String(cpf)
+    .replace(/\D/g, "")
+    .slice(0, 11)
+    .replace(/(\d{3})(\d)/, "$1.$2")
+    .replace(/(\d{3})(\d)/, "$1.$2")
+    .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+};
+const formatCNPJ = (cnpj) => {
+  if (!cnpj) return "—";
+
+  return String(cnpj)
+    .replace(/\D/g, "")
+    .slice(0, 14)
+    .replace(/^(\d{2})(\d)/, "$1.$2")
+    .replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
+    .replace(/\.(\d{3})(\d)/, ".$1/$2")
+    .replace(/(\d{4})(\d)/, "$1-$2");
+};
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -82,6 +103,7 @@ export default function Checkout({ selectedAddress, onOpenAddresses, onBack, onR
       setProcessing(false);
     }
   }
+  
 
   
 if (loading) return (
@@ -152,13 +174,62 @@ if (loading) return (
       {!cart && error ? null : <form className="az-checkout-grid" onSubmit={handleSubmit}>
         <div className="az-checkout-sections">
           <section className="az-checkout-panel">
-            <h2><span className="az-checkout-num">01</span> CONTATO</h2>
-            <div className="az-checkout-contact">
-              <div><span>Nome</span><strong>{profile?.name || "—"}</strong></div>
-              <div><span>Email</span><strong>{profile?.email || "—"}</strong></div>
-              <div><span>CPF</span><strong>{profile?.cpf || "Consulte os dados da conta"}</strong></div>
-            </div>
-          </section>
+  <h2>
+    <span className="az-checkout-num">01</span>
+    {profile?.role === "company" ? "DADOS DA EMPRESA" : "CONTATO"}
+  </h2>
+
+  <div className="az-checkout-contact">
+
+    {profile?.role === "company" ? (
+      <>
+        <div>
+          <span>Nome fantasia</span>
+          <strong>{profile?.company?.trade_name || "—"}</strong>
+        </div>
+
+        <div>
+          <span>Razão social</span>
+          <strong>{profile?.company?.corporate_name || "—"}</strong>
+        </div>
+
+        <div>
+          <span>CNPJ</span>
+          <strong>{formatCNPJ(profile?.company?.cnpj)}</strong>
+        </div>
+
+        <div>
+          <span>Inscrição Estadual</span>
+          <strong>{profile?.company?.ie || "Não informada"}</strong>
+        </div>
+
+        <div>
+          <span>Email</span>
+          <strong>{profile?.email || "—"}</strong>
+        </div>
+      </>
+    ) : (
+      <>
+        <div>
+          <span>Nome</span>
+          <strong>{profile?.name || "—"}</strong>
+        </div>
+
+        <div>
+          <span>Email</span>
+          <strong>{profile?.email || "—"}</strong>
+        </div>
+
+        <div>
+          <span>CPF</span>
+          <strong>{formatCPF(profile?.cpf)}</strong>
+        </div>
+      </>
+    )}
+
+  </div>
+</section>
+          
 
           <section className="az-checkout-panel">
             <h2><span className="az-checkout-num">02</span> ENTREGA</h2>

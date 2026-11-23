@@ -22,14 +22,6 @@ class LoginSchema(BaseModel):
     password: str
 
     model_config = ConfigDict(from_attributes=True)
-
-class UserOut(BaseModel):
-    id_user: int
-    name: str
-    email: str
-    role: str
-
-    model_config = ConfigDict(from_attributes=True)
 class TokenOut(BaseModel):
     access_token: str
     token_type: str
