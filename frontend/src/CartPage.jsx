@@ -169,7 +169,7 @@ export default function CartPage({
                 className="btn az-btn az-cart-catalog-btn"
                 onClick={onBack}
               >
-                Ver catálogo
+                Catálogo
               </button>
 
             </div>

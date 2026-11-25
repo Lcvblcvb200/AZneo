@@ -10,7 +10,8 @@ import AddressModal from "./AddressModal.jsx";
 import Checkout from "./Checkout.jsx";
 import PrivacyPolicyPage from "./PrivacyPolicyPage.jsx";
 import TermsOfUsePage from "./TermsOfUsePage.jsx";
-import CodeDashboard from "./CodeDashboard";
+import CodeDashboard from "./CodeDashboard.jsx";
+import AdminDashboard from "./AdminDashboard.jsx";
 
 
 
@@ -636,6 +637,14 @@ if (screen === "codes" && isAdmin) {
   );
 }
 
+if (screen === "dashboard" && isAdmin) {
+  return (
+    <AdminDashboard
+      onBack={() => setScreen("catalog")}
+    />
+  );
+}
+
   // =========================================================
   // CATÁLOGO
   // =========================================================
@@ -677,6 +686,12 @@ if (screen === "codes" && isAdmin) {
         cartCount={cartCount}
         selectedAddress={selectedAddress}
         onOpenAddresses={() => setShowAddressModal(true)}
+
+        onOpenDashboard={
+          isAdmin
+            ? () => setScreen("dashboard")
+            : undefined
+        }
       />
 
       {showAddressModal && (

@@ -95,9 +95,11 @@ export default function CatalogPage({
   onOpenCart,
   onCartChange,
   onOpenCodes,
+  onOpenDashboard,
   cartCount = 0,
   selectedAddress,
   onOpenAddresses,
+  isAdmin = false,
 }) {
   const [products, setProducts] = useState([]);
 
@@ -444,6 +446,8 @@ const baseList =
     searchResults === null &&
     totalPages > 1;
 
+
+      
   return (
     <div className="az-catalog">
       <div className="az-top-line" />
@@ -531,6 +535,16 @@ const baseList =
               </button>
             )}
 
+            {!needsAuth && onOpenDashboard && (
+              <button
+                type="button"
+                className="btn az-topbar-add"
+                onClick={onOpenDashboard}
+              >
+                Estatísticas
+              </button>
+            )}
+
             {/* DASHBOARD DE CUPONS — ADMIN */}
             {!needsAuth && onOpenCodes && (
               <button
@@ -554,11 +568,6 @@ const baseList =
               {cartCount > 0 && (
                 <span className="az-cart-badge">
                   {cartCount}
-                  onOpenCodes={
-                    isAdmin
-                      ? () => setScreen("codes")
-                      : undefined
-                  }
                 </span>
               )}
             </button>
@@ -897,6 +906,7 @@ const baseList =
       </main>
     </div>
   );
+}
 
 function CategoryIcon({ category }) {
   const commonProps = {
@@ -1161,4 +1171,4 @@ function ProductGridSkeleton() {
       ))}
     </div>
   );
-}}
+}

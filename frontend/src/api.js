@@ -324,3 +324,16 @@ export function createOrder(idAddress, couponCode = null) {
     }),
   });
 }
+
+export function getAdminDashboard(period = "30d") {
+  const token = getAccessToken();
+
+  return request(
+    `/admin/dashboard?period=${encodeURIComponent(period)}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+}

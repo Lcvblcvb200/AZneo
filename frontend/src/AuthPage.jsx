@@ -98,58 +98,6 @@ export default function AuthPage({
 
           </p>
 
-
-          <ul className="az-trace-list">
-
-            <li className="az-trace-item">
-
-              <span className="az-trace-node" />
-
-              <h6>
-                Produtos Confiáveis
-              </h6>
-
-              <p>
-                Os produtos são verificados antes
-                de anunciados na plataforma.
-              </p>
-
-            </li>
-
-
-            <li className="az-trace-item">
-
-              <span className="az-trace-node" />
-
-              <h6>
-                Pagamento protegido
-              </h6>
-
-              <p>
-                O valor só é liberado após a
-                confirmação do recebimento.
-              </p>
-
-            </li>
-
-
-            <li className="az-trace-item">
-
-              <span className="az-trace-node" />
-
-              <h6>
-                Sistema Intuitivo
-              </h6>
-
-              <p>
-                Nosso sistema é fácil de utilizar.
-              </p>
-
-            </li>
-
-          </ul>
-
-
           <div
             style={{
               marginTop: "2.5rem",
